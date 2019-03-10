@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework.Input
 	/// <summary>
 	/// Represents a mouse state with cursor position and button press information.
 	/// </summary>
-	public struct MouseState
+	public partial struct MouseState
 	{
 		#region Public Properties
 

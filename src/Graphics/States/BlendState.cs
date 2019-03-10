@@ -9,7 +9,7 @@
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	public class BlendState : GraphicsResource
+	public partial class BlendState : GraphicsResource
 	{
 		#region Public Properties
 

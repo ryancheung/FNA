@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework.Input
 	/// Represents specific information about the state of a controller,
 	/// including the current state of buttons and sticks.
 	/// </summary>
-	public struct GamePadState
+	public partial struct GamePadState
 	{
 		#region Public Properties
 

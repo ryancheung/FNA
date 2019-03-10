@@ -16,6 +16,13 @@ using System.Text;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
+    public enum SpriteFlags
+    {
+        None = 0,
+        DoNotSaveState = 1,
+        AlphaBlend = 2
+    }
+
 	/* MSDN Docs:
 	 * http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.graphics.spritebatch.aspx
 	 * Other References:
@@ -118,6 +125,36 @@ namespace Microsoft.Xna.Framework.Graphics
 		private Effect customEffect;
 
 		#endregion
+
+        Blend _oldColorSourceBlend;
+        Blend _oldColorDestinationBlend;
+        Blend _oldAlphaSourceBlend;
+        Blend _oldAlphaDestinationBlend;
+        Color _oldBlendFactor;
+        bool _customMode = false;
+        SpriteFlags _spriteFlags;
+
+        public Matrix Transform
+        {
+            get { return transformMatrix; }
+            set
+            {
+                if (transformMatrix == value)
+                    return;
+
+                transformMatrix = value;
+
+                if (customEffect != null)
+                {
+                    if (customEffect is AlphaTestEffect)
+                        (customEffect as AlphaTestEffect).View = transformMatrix;
+                }
+            }
+        }
+        public Effect CustomEffect {
+            get { return customEffect; }
+            set { customEffect = value; }
+        }
 
 		#region Private Static Variables
 
@@ -293,6 +330,47 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
+        public void Begin(SpriteFlags flags)
+        {
+			if (beginCalled)
+			{
+				throw new InvalidOperationException(
+					"Begin has been called before calling End" +
+					" after the last call to Begin." +
+					" Begin cannot be called again until" +
+					" End has been successfully called."
+				);
+			}
+			beginCalled = true;
+
+            sortMode = SpriteSortMode.Deferred;
+            _spriteFlags = flags;
+            _customMode = true;
+            if (!_spriteFlags.HasFlag(SpriteFlags.DoNotSaveState))
+            {
+                _oldColorSourceBlend = GraphicsDevice.BlendState.ColorSourceBlend;
+                _oldColorDestinationBlend = GraphicsDevice.BlendState.ColorDestinationBlend;
+                _oldAlphaSourceBlend = GraphicsDevice.BlendState.AlphaSourceBlend;
+                _oldAlphaDestinationBlend = GraphicsDevice.BlendState.AlphaDestinationBlend;
+                _oldBlendFactor = GraphicsDevice.BlendFactor;
+            }
+
+            if (_spriteFlags.HasFlag(SpriteFlags.AlphaBlend))
+            {
+                GraphicsDevice.BlendState.ColorSourceBlend = Blend.One;
+                GraphicsDevice.BlendState.AlphaSourceBlend = Blend.One;
+                GraphicsDevice.BlendState.ColorDestinationBlend = Blend.InverseSourceAlpha;
+                GraphicsDevice.BlendState.AlphaDestinationBlend = Blend.InverseSourceAlpha;
+                GraphicsDevice.BlendState.BlendFactor = Color.White;
+                GraphicsDevice.BlendStateDirty = true;
+
+                GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+                transformMatrix = Matrix.Identity;
+
+                customEffect = null;
+            }
+        }
+
 		#endregion
 
 		#region Public End Method
@@ -309,12 +387,34 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 			beginCalled = false;
 
+            if (_customMode) // Restore device states
+            {
+				FlushBatch();
+
+                if (!_spriteFlags.HasFlag(SpriteFlags.DoNotSaveState))
+                {
+                    GraphicsDevice.BlendState.ColorSourceBlend = _oldColorSourceBlend;
+                    GraphicsDevice.BlendState.ColorDestinationBlend = _oldColorDestinationBlend;
+                    GraphicsDevice.BlendState.AlphaSourceBlend = _oldAlphaSourceBlend;
+                    GraphicsDevice.BlendState.AlphaDestinationBlend = _oldAlphaDestinationBlend;
+                    GraphicsDevice.BlendState.BlendFactor = _oldBlendFactor;
+                    GraphicsDevice.BlendStateDirty = true;
+                }
+
+                return;
+            }
+
 			if (sortMode != SpriteSortMode.Immediate)
 			{
 				FlushBatch();
 			}
 			customEffect = null;
 		}
+
+        public void Flush()
+        {
+            FlushBatch();
+        }
 
 		#endregion
 
@@ -1354,10 +1454,13 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		private void PrepRenderState()
 		{
+            if (!_customMode)
+            {
 			GraphicsDevice.BlendState = blendState;
 			GraphicsDevice.SamplerStates[0] = samplerState;
 			GraphicsDevice.DepthStencilState = depthStencilState;
 			GraphicsDevice.RasterizerState = rasterizerState;
+            }
 
 			GraphicsDevice.SetVertexBuffer(vertexBuffer);
 			GraphicsDevice.Indices = indexBuffer;

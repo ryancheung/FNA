@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -9,6 +9,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>FNA</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>True</DebugSymbols>
@@ -21,6 +23,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -31,6 +34,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>True</DebugSymbols>
@@ -43,6 +47,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>none</DebugType>
@@ -53,6 +58,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -64,6 +70,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -73,9 +80,11 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -102,6 +111,7 @@
     <Compile Include="src\BoundingFrustum.cs" />
     <Compile Include="src\BoundingSphere.cs" />
     <Compile Include="src\Color.cs" />
+    <Compile Include="src\ColorExt.cs" />
     <Compile Include="src\ContainmentType.cs" />
     <Compile Include="src\Content\ContentExtensions.cs" />
     <Compile Include="src\Content\ContentLoadException.cs" />
@@ -297,6 +307,7 @@
     <Compile Include="src\Graphics\States\Blend.cs" />
     <Compile Include="src\Graphics\States\BlendFunction.cs" />
     <Compile Include="src\Graphics\States\BlendState.cs" />
+    <Compile Include="src\Graphics\States\BlendStateExt.cs" />
     <Compile Include="src\Graphics\States\CompareFunction.cs" />
     <Compile Include="src\Graphics\States\CullMode.cs" />
     <Compile Include="src\Graphics\States\DepthStencilState.cs" />
@@ -344,6 +355,7 @@
     <Compile Include="src\Input\GamePadDeadZone.cs" />
     <Compile Include="src\Input\GamePadDPad.cs" />
     <Compile Include="src\Input\GamePadState.cs" />
+    <Compile Include="src\Input\GamePadStateExt.cs" />
     <Compile Include="src\Input\GamePadThumbSticks.cs" />
     <Compile Include="src\Input\GamePadTriggers.cs" />
     <Compile Include="src\Input\GamePadType.cs" />
@@ -353,6 +365,7 @@
     <Compile Include="src\Input\KeyState.cs" />
     <Compile Include="src\Input\Mouse.cs" />
     <Compile Include="src\Input\MouseState.cs" />
+    <Compile Include="src\Input\MouseStateExt.cs" />
     <Compile Include="src\Input\TextInputEXT.cs" />
     <Compile Include="src\Input\Touch\GestureDetector.cs" />
     <Compile Include="src\Input\Touch\GestureSample.cs" />
@@ -380,6 +393,7 @@
     <Compile Include="src\PlaneIntersectionType.cs" />
     <Compile Include="src\PlayerIndex.cs" />
     <Compile Include="src\Point.cs" />
+    <Compile Include="src\PointExt.cs" />
     <Compile Include="src\PreparingDeviceSettingsEventArgs.cs" />
     <Compile Include="src\Properties\AssemblyInfo.cs" />
     <Compile Include="src\Quaternion.cs" />
@@ -402,6 +416,7 @@
     <Compile Include="lib\FAudio\csharp\FAudio.cs" />
     <Compile Include="lib\MojoShader\csharp\MojoShader.cs" />
     <Compile Include="lib\Theorafile\csharp\Theorafile.cs" />
+    <Compile Include="Vector2Ext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FNA.dll.config">

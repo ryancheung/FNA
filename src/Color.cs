@@ -29,7 +29,7 @@ namespace Microsoft.Xna.Framework
 	[Serializable]
 	[TypeConverter(typeof(ColorConverter))]
 	[DebuggerDisplay("{DebugDisplayString,nq}")]
-	public struct Color : IEquatable<Color>, IPackedVector, IPackedVector<uint>
+	public partial struct Color : IEquatable<Color>, IPackedVector, IPackedVector<uint>
 	{
 		#region Public Properties
 

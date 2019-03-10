@@ -92,10 +92,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region Public GL State Properties
+        #region Public GL State Properties
 
+        public bool BlendStateDirty { get; set; } = false;
 		public TextureCollection Textures
 		{
 			get;
@@ -1437,10 +1438,11 @@ namespace Microsoft.Xna.Framework.Graphics
 		private void ApplyState()
 		{
 			// Update Blend/DepthStencil, if applicable
-			if (currentBlend != nextBlend)
+			if (currentBlend != nextBlend || BlendStateDirty)
 			{
 				GLDevice.SetBlendState(nextBlend);
 				currentBlend = nextBlend;
+                BlendStateDirty = false;
 			}
 			if (currentDepthStencil != nextDepthStencil)
 			{

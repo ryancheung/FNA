@@ -27,7 +27,7 @@ namespace Microsoft.Xna.Framework
 	[Serializable]
 	[TypeConverter(typeof(PointConverter))]
 	[DebuggerDisplay("{DebugDisplayString,nq}")]
-	public struct Point : IEquatable<Point>
+	public partial struct Point : IEquatable<Point>
 	{
 		#region Public Static Properties
 
